@@ -19,5 +19,8 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
         List[float]: A list of delays experienced,
         in ascending order due to the nature of how they complete.
     """
-    tasks = [wait_random(max_delay) for _ in range(n)]
-    return await asyncio.gather(*tasks)
+    list_delay = []
+    for _ in range(n):
+        delay = await wait_random(max_delay)
+        list_delay.append(delay)
+    return sorted(list_delay)
