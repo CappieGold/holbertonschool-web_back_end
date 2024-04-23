@@ -24,3 +24,5 @@ python_async_function/1-main.py
 python_async_function/__pycache__/1-concurrent_coroutines.cpython-310.pyc
 python_async_function/2-main.py
 python_async_function/__pycache__/2-measure_runtime.cpython-310.pyc
+python_async_function/__pycache__/3-tasks.cpython-310.pyc
+python_async_function/3-main.py
