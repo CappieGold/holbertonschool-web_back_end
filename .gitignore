@@ -20,3 +20,5 @@ python_variable_annotations/__pycache__/9-element_length.cpython-310.pyc
 python_variable_annotations/9-main.py
 python_async_function/__pycache__/0-basic_async_syntax.cpython-310.pyc
 python_async_function/0-main.py
+python_async_function/1-main.py
+python_async_function/__pycache__/1-concurrent_coroutines.cpython-310.pyc
