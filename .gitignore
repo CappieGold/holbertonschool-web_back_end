@@ -30,3 +30,5 @@ python_async_function/__pycache__/4-tasks.cpython-310.pyc
 python_async_function/4-main.py
 python_async_comprehension/0-main.py
 python_async_comprehension/__pycache__/0-async_generator.cpython-310.pyc
+python_async_comprehension/1-main.py
+python_async_comprehension/__pycache__/1-async_comprehension.cpython-310.pyc
