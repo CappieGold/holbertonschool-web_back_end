@@ -18,3 +18,5 @@ python_variable_annotations/8-main.py
 python_variable_annotations/__pycache__/8-make_multiplier.cpython-310.pyc
 python_variable_annotations/__pycache__/9-element_length.cpython-310.pyc
 python_variable_annotations/9-main.py
+python_async_function/__pycache__/0-basic_async_syntax.cpython-310.pyc
+python_async_function/0-main.py
