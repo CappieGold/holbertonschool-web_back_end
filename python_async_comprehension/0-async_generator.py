@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""async_generator"""
+"""
+This module provides an asynchronous generator that yields random numbers.
+Each number is generated after waiting for 1 second,
+demonstrating asynchronous execution.
+"""
 
 import asyncio
 import random
+from typing import AsyncGenerator
 
 
-async def async_generator():
+async def async_generator() -> AsyncGenerator[float, None]:
     """
     Write a coroutine called async_generator that takes no arguments.
 
