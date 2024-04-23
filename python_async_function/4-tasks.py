@@ -17,9 +17,10 @@ async def task_wait_n(n: int, max_delay: int) -> List[float]:
     Args:
         n (int): The number of tasks to spawn.
         max_delay (int): The maximum delay for each task.
-    
+
     Returns:
-        List[float]: List of delays from the completed tasks, in the order they completed.
+        List[float]: List of delays from the completed tasks,
+        in the order they completed.
     """
     tasks = [task_wait_random(max_delay) for _ in range(n)]
     results = []
