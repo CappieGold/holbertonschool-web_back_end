@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tak 1"""
+"""Task one"""
 
 import csv
 import math
@@ -24,9 +24,11 @@ def index_range(page: int, page_size: int) -> tuple:
 
 class Server:
     """Server class to paginate a database of popular baby names."""
+
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
+        """Init"""
         self.__dataset = None
 
     def dataset(self) -> List[List]:
@@ -39,6 +41,9 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
+        """
+        method getpage
+        """
         assert isinstance(page, int) and page > 0, \
             "Page must be a positive integer"
         assert isinstance(page_size, int) and page_size > 0, \
