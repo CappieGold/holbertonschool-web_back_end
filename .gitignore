@@ -41,3 +41,5 @@ pagination/__pycache__/1-simple_pagination.cpython-310.pyc
 pagination/1-main.py
 pagination/__pycache__/2-hypermedia_pagination.cpython-310.pyc
 pagination/2-main.py
+pagination/__pycache__/3-hypermedia_del_pagination.cpython-310.pyc
+pagination/3-main.py
