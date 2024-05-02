@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Deletion-resilient hypermedia pagination
-"""
+"""Deletion-resilient hypermedia pagination"""
 
 import csv
 import math
@@ -14,6 +12,7 @@ class Server:
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
+        """Init"""
         self.__dataset = None
         self.__indexed_dataset = None
 
@@ -23,7 +22,7 @@ class Server:
             with open(self.DATA_FILE) as f:
                 reader = csv.reader(f)
                 dataset = [row for row in reader]
-            self.__dataset = dataset[1:]  # Skip the header
+            self.__dataset = dataset[1:]
         return self.__dataset
 
     def indexed_dataset(self) -> Dict[int, List]:
