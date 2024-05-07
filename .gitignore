@@ -43,3 +43,12 @@ pagination/__pycache__/2-hypermedia_pagination.cpython-310.pyc
 pagination/2-main.py
 pagination/__pycache__/3-hypermedia_del_pagination.cpython-310.pyc
 pagination/3-main.py
+ES6_basic/node_modules/.bin/acorn
+node_modules
+ES6_basic/babel.config.js
+ES6_basic/nodesource_setup.sh
+ES6_basic/package-lock.json
+ES6_basic/package.json
+ES6_basic/.eslintrc.js
+ES6_basic/.editorconfig
+ES6_basic/0-main.js
