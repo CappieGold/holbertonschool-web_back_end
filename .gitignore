@@ -63,3 +63,8 @@ ES6_basic/8-main.js
 ES6_basic/10-main.js
 ES6_basic/11-main.js
 ES6_basic/12-main.js
+ES6_classes/package.json
+ES6_classes/package-lock.json
+ES6_classes/nodesource_setup.sh
+ES6_classes/babel.config.js
+ES6_classes/.eslintrc.js
