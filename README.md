@@ -5,3 +5,4 @@
 ## 4 - NoSQL
 ## 5 - Pagination
 ## 6 - ES6 Basics
+## 7 - ES6 classes
