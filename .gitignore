@@ -68,3 +68,5 @@ ES6_classes/package-lock.json
 ES6_classes/nodesource_setup.sh
 ES6_classes/babel.config.js
 ES6_classes/.eslintrc.js
+ES6_classes/0-main.js
+ES6_classes/.editorconfig
