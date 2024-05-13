@@ -77,3 +77,9 @@ ES6_classes/7-main.js
 ES6_classes/8-main.js
 ES6_classes/9-main.js
 ES6_classes/10-main.js
+ES6_promise/nodesource_setup.sh
+ES6_promise/.eslintrc.js
+ES6_promise/babel.config.js
+ES6_promise/package-lock.json
+ES6_promise/package.json
+ES6_promise/utils.js
