@@ -2,10 +2,15 @@ import { uploadPhoto, createUser } from './utils';
 
 function handleProfileSignup() {
   Promise.all([uploadPhoto(), createUser()])
-    .then((values) => {
-      console.log(`${values[0].body} ${values[1].firstName} ${values[1].lastName}`);
+    .then(([photoResult, userResult]) => {
+      // Extract data from both promises
+      const { body } = photoResult;
+      const { firstName, lastName } = userResult;
+      // Log the combined result
+      console.log(`${body} ${firstName} ${lastName}`);
     })
     .catch(() => {
+      // Log an error message if any of the promises reject
       console.log('Signup system offline');
     });
 }
