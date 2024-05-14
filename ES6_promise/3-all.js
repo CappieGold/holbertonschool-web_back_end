@@ -5,8 +5,8 @@ function handleProfileSignup() {
     .then((values) => {
       console.log(`${values[0].body} ${values[1].firstName} ${values[1].lastName}`);
     })
-    .catch(() => {
-      console.error('Signup system offline');
+    .catch((error) => {
+      console.log(error, 'Signup system offline');
     });
 }
 
