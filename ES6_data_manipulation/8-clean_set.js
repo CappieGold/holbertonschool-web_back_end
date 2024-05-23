@@ -9,6 +9,6 @@ export default function cleanSet(set, startString) {
       result.push(value.slice(startString.length));
     }
   }
-  
+
   return result.join('-');
 }
