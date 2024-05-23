@@ -100,3 +100,5 @@ ES6_data_manipulation/eslintrc.js
 ES6_data_manipulation/nodesource_setup.sh
 ES6_data_manipulation/package-lock.json
 ES6_data_manipulation/package.json
+ES6_data_manipulation/.editorconfig
+ES6_data_manipulation/0-main.js
