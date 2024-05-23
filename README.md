@@ -7,3 +7,4 @@
 ## 6 - ES6 Basics
 ## 7 - ES6 classes
 ## 8 - ES6 Promises
+## 9 - ES6 data manipulation
