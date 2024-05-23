@@ -95,3 +95,8 @@ ES6_promise/6-main.js
 ES6_promise/7-main.js
 ES6_promise/8-main.js
 ES6_promise/9-main.js
+ES6_data_manipulation/babel.config.js
+ES6_data_manipulation/eslintrc.js
+ES6_data_manipulation/nodesource_setup.sh
+ES6_data_manipulation/package-lock.json
+ES6_data_manipulation/package.json
