@@ -27,7 +27,7 @@ class LIFOCache(BaseCaching):
             removed = self.order.pop(3)
             del self.cache_data[removed]
             print(f"DISCARD: {removed}")
-    
+
     def get(self, key):
         """ get methode
         """
