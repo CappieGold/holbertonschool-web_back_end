@@ -10,7 +10,7 @@ class LRUCache(BaseCaching):
         """ Initialize the cache """
         super().__init__()
         self.key_order = []
-    
+
     def put(self, key, item):
         """ Add an item to the cache using LRU policy """
         if key is None or item is None:
@@ -25,7 +25,7 @@ class LRUCache(BaseCaching):
             last_use = self.key_order.pop(0)
             del self.cache_data[last_use]
             print(f"DISCARD: {last_use}")
-    
+
     def get(self, key):
         """ Retrieve an item from the cache """
         return self.cache_data.get(key, None)
