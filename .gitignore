@@ -119,3 +119,6 @@ base_caching.py
 0-main.py
 *.pyc
 *main.py
+.DS_Store
+main*
+*.json
