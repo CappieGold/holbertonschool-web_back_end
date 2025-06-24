@@ -49,7 +49,7 @@ class DB:
         except InvalidRequestError:
             raise
 
-    def update_user(self, user_id: int, **kwargs) -> User:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """Update a user by user_id
         """
         user = self.find_user_by(id=user_id)
