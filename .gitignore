@@ -122,3 +122,4 @@ base_caching.py
 .DS_Store
 main*
 *.json
+a.db
