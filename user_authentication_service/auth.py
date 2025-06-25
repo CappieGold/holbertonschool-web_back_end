@@ -47,3 +47,9 @@ class Auth:
                 )
         except NoResultFound:
             return False
+
+    def _generate_uuid(self) -> str:
+        """
+        Generate a UUID for the user.
+        """
+        return self._db.generate_uuid()
