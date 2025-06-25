@@ -82,11 +82,13 @@ def profile():
 
     user = AUTH.get_user_from_session_id(session_id)
 
-    if user:
+    try:
         response = jsonify({
             "email": user.email,
         }, 200)
         return response
+    except AttributeError:
+        return flask.abort(403)
 
 
 if __name__ == "__main__":
