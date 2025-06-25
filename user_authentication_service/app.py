@@ -70,7 +70,7 @@ def logout():
         return flask.abort(403)
 
     AUTH.destroy_session(user.id)
-    flask.redirect("/", 302)
+    return flask.redirect("/", 302)
 
 
 if __name__ == "__main__":
