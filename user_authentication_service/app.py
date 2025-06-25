@@ -84,7 +84,7 @@ def profile():
 
     try:
         response = jsonify({
-            "email": user.email,
+            "email": user.email
         }, 200)
         return response
     except AttributeError:
