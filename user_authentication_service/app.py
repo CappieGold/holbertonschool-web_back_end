@@ -85,7 +85,8 @@ def profile():
     try:
         response = jsonify({
             "email": user.email
-        }, 200)
+        })
+        response.status_code = 200
         return response
     except AttributeError:
         return flask.abort(403)
