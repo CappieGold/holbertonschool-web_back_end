@@ -73,5 +73,21 @@ def logout():
     return flask.redirect("/", 302)
 
 
+@app.route("/profile", methods=['GET'])
+def profile():
+    """
+    GET /profile route to get user profile
+    """
+    session_id = request.cookies.get("session_id")
+
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if user:
+        response = jsonify({
+            "email": user.email,
+        }, 200)
+        return response
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
