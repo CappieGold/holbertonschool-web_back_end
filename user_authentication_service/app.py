@@ -106,7 +106,7 @@ def get_reset_password_token():
             "reset_token": reset_token
         }), 200
     except ValueError:
-        return 403
+        flask.abort(403)
 
 
 if __name__ == "__main__":
