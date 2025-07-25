@@ -4,8 +4,9 @@ Tests unitaires pour le module client
 """
 import unittest
 from unittest.mock import patch
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -87,6 +88,42 @@ class TestGithubOrgClient(unittest.TestCase):
         """Test que has_license retourne la valeur attendue"""
         result = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(result, expected)
+
+
+@parameterized_class([
+    {
+        'org_payload': TEST_PAYLOAD[0][0],
+        'repos_payload': TEST_PAYLOAD[0][1],
+        'expected_repos': TEST_PAYLOAD[0][2],
+        'apache2_repos': TEST_PAYLOAD[0][3]
+    }
+])
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """Classe de test d'intégration pour GithubOrgClient"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Configure les mocks pour toute la classe de test"""
+        def side_effect(url):
+            """Fonction side_effect pour mocker requests.get"""
+            mock_response = unittest.mock.Mock()
+
+            if url == "https://api.github.com/orgs/google":
+                mock_response.json.return_value = cls.org_payload
+            elif url == "https://api.github.com/orgs/google/repos":
+                mock_response.json.return_value = cls.repos_payload
+            else:
+                mock_response.json.return_value = None
+
+            return mock_response
+
+        cls.get_patcher = patch('requests.get', side_effect=side_effect)
+        cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        """Arrête le patcher après tous les tests"""
+        cls.get_patcher.stop()
 
 
 if __name__ == '__main__':
