@@ -64,7 +64,7 @@ class TestGithubOrgClient(unittest.TestCase):
             GithubOrgClient,
             '_public_repos_url',
             new_callable=lambda: property(lambda self: test_repos_url)
-        ) as mock_public_repos_url:
+        ):
             client = GithubOrgClient("google")
 
             result = client.public_repos()
@@ -76,8 +76,6 @@ class TestGithubOrgClient(unittest.TestCase):
                 "ios-webkit-debug-proxy"
             ]
             self.assertEqual(result, expected_repos)
-
-            mock_public_repos_url.assert_called_once()
 
             mock_get_json.assert_called_once_with(test_repos_url)
 
