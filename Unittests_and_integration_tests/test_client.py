@@ -30,6 +30,22 @@ class TestGithubOrgClient(unittest.TestCase):
 
         self.assertEqual(result, test_payload)
 
+    def test_public_repos_url(self):
+        """Test que _public_repos_url retourne la valeur attendue"""
+        test_payload = {
+            "repos_url": "https://api.github.com/orgs/google/repos"
+            }
+
+        with patch.object(
+            GithubOrgClient,
+            'org', new_callable=lambda: property(lambda self: test_payload)
+        ):
+            client = GithubOrgClient("google")
+
+            result = client._public_repos_url
+
+            self.assertEqual(result, test_payload["repos_url"])
+
 
 if __name__ == '__main__':
     unittest.main()
