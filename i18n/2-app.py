@@ -16,16 +16,18 @@ class Config:
 app = Flask(__name__)
 app.config.from_object(Config)
 
-babel = Babel(app)
+babel = Babel()
 
 
-@babel.localeselector
 def get_locale():
     """
     Détermine la meilleure langue à utiliser pour l'utilisateur
     basée sur les langues acceptées par le navigateur
     """
     return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+
+babel.init_app(app, locale_selector=get_locale)
 
 
 @app.route('/')
