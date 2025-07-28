@@ -1,13 +1,26 @@
 #!/usr/bin/env python3
 """Redis basic exercise: Cache class."""
 
-from typing import Union, Optional, Callable, TypeVar, overload
+from typing import Union, Optional, Callable, TypeVar, overload, Any
+from functools import wraps
 import uuid
 import redis
 from redis import Redis
 
 Data = Union[str, bytes, int, float]
 T = TypeVar("T")
+
+
+def count_calls(method: Callable[..., Any]) -> Callable[..., Any]:
+    """Décorateur qui compte combien de fois `method` est appelée.
+
+    La clé utilisée dans Redis est le `__qualname__` de la méthode.
+    """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        self._redis.incr(method.__qualname__)
+        return method(self, *args, **kwargs)
+    return wrapper
 
 
 class Cache:
@@ -18,6 +31,7 @@ class Cache:
         self._redis: Redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Data) -> str:
         """Stocke `data` sous une clé aléatoire et retourne la clé.
 
@@ -39,18 +53,9 @@ class Cache:
     def get(self, key: str, fn: Optional[Callable[[bytes], T]] = None):
         """Récupère la valeur associée à `key`.
 
-        - Conserve le comportement de `Redis.get`: retourne `None`
-          si la clé n'existe pas, sinon retourne des `bytes`.
-        - Si `fn` est fourni, applique cette fonction aux `bytes`
-          et retourne le résultat.
-
-        Args:
-            key: clé Redis.
-            fn: fonction de conversion à appliquer aux bytes.
-
-        Returns:
-            None si la clé n'existe pas,
-            sinon `bytes` ou le type retourné par `fn`.
+        - Comportement de `Redis.get`: `None` si la clé n'existe pas,
+          sinon `bytes`.
+        - Si `fn` est fourni, applique la fonction de conversion sur les bytes.
         """
         data = self._redis.get(key)
         if data is None:
