@@ -42,6 +42,34 @@ def call_history(method: Callable[..., Any]) -> Callable[..., Any]:
     return wrapper
 
 
+def replay(method: Callable[..., Any]) -> None:
+    """Affiche l'historique des appels d'une méthode particulière.
+
+    Args:
+        method: La méthode dont on veut afficher l'historique.
+    """
+
+    redis_instance = method.__self__._redis
+
+    method_name = method.__qualname__
+    inputs_key = f"{method_name}:inputs"
+    outputs_key = f"{method_name}:outputs"
+
+    count = redis_instance.get(method_name)
+    count = int(count) if count else 0
+
+    print(f"{method_name} was called {count} times:")
+
+    inputs = redis_instance.lrange(inputs_key, 0, -1)
+    outputs = redis_instance.lrange(outputs_key, 0, -1)
+
+    for input_args, output_result in zip(inputs, outputs):
+        input_str = input_args.decode('utf-8')
+        output_str = output_result.decode('utf-8')
+
+        print(f"{method_name}(*{input_str}) -> {output_str}")
+
+
 class Cache:
     """Petit wrapper de cache autour de redis-py."""
 
