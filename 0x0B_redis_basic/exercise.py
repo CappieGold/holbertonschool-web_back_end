@@ -23,6 +23,25 @@ def count_calls(method: Callable[..., Any]) -> Callable[..., Any]:
     return wrapper
 
 
+def call_history(method: Callable[..., Any]) -> Callable[..., Any]:
+    """Décorateur qui enregistre l'historique des entrées/sorties.
+
+    - Stocke les arguments passés dans la liste `<qualname>:inputs`
+    - Stocke la valeur de retour dans la liste `<qualname>:outputs`
+    """
+    inputs_key = f"{method.__qualname__}:inputs"
+    outputs_key = f"{method.__qualname__}:outputs"
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        self._redis.rpush(inputs_key, str(args))
+        result = method(self, *args, **kwargs)
+        self._redis.rpush(outputs_key, str(result))
+        return result
+
+    return wrapper
+
+
 class Cache:
     """Petit wrapper de cache autour de redis-py."""
 
@@ -32,6 +51,7 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
+    @call_history
     def store(self, data: Data) -> str:
         """Stocke `data` sous une clé aléatoire et retourne la clé.
 
