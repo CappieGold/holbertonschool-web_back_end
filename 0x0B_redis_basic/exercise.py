@@ -5,7 +5,6 @@ import uuid
 import redis
 from functools import wraps
 from typing import Callable, Optional, Union, TypeVar, overload
-from redis import Redis
 
 Data = Union[str, bytes, int, float]
 T = TypeVar("T")
@@ -51,7 +50,7 @@ def call_history(method: Callable) -> Callable:
 def replay(method: Callable) -> None:
     """Affiche l'historique des appels d'une méthode décorée."""
     base = method.__qualname__
-    r: Redis = method.__self__._redis
+    r = method.__self__._redis  # accès à l'instance Redis via la méthode liée
 
     raw_count = r.get(base)
     count = int(raw_count) if raw_count is not None else 0
@@ -71,7 +70,7 @@ class Cache:
 
     def __init__(self) -> None:
         """Instancie le client Redis et vide la base."""
-        self._redis: Redis = redis.Redis()
+        self._redis = redis.Redis()
         self._redis.flushdb()
 
     @count_calls
