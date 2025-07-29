@@ -1,79 +1,69 @@
 #!/usr/bin/env python3
 """Redis basic exercise: Cache class."""
 
-from typing import Union, Optional, Callable, TypeVar, overload, Any
-from functools import wraps
 import uuid
 import redis
+from functools import wraps
+from typing import Callable, Optional, Union, TypeVar, overload
 from redis import Redis
 
 Data = Union[str, bytes, int, float]
 T = TypeVar("T")
 
 
-def count_calls(method: Callable[..., Any]) -> Callable[..., Any]:
-    """Décorateur qui compte combien de fois `method` est appelée.
+def count_calls(method: Callable) -> Callable:
+    """Décorateur qui compte le nombre d'appels d'une méthode.
 
-    La clé utilisée dans Redis est le `__qualname__` de la méthode.
+    Clé utilisée : `method.__qualname__`.
     """
+    key = method.__qualname__
+
     @wraps(method)
-    def wrapper(self, *args, **kwargs):
-        """
-        Incrémente le compteur d'appels de la méthode.
-        """
-        self._redis.incr(method.__qualname__)
-        return method(self, *args, **kwargs)
+    def wrapper(self, *args, **kwds):
+        self._redis.incr(key)
+        return method(self, *args, **kwds)
+
     return wrapper
 
 
-def call_history(method: Callable[..., Any]) -> Callable[..., Any]:
-    """Décorateur qui enregistre l'historique des entrées/sorties.
-
-    - Stocke les arguments passés dans la liste `<qualname>:inputs`
-    - Stocke la valeur de retour dans la liste `<qualname>:outputs`
+def call_history(method: Callable) -> Callable:
     """
-    inputs_key = f"{method.__qualname__}:inputs"
-    outputs_key = f"{method.__qualname__}:outputs"
+    Décorateur qui enregistre l'historique des entrées/sorties d'une méthode.
+
+    Listes dans Redis :
+      - <qualname>:inputs
+      - <qualname>:outputs
+    """
+    base = method.__qualname__
+    inputs_key = f"{base}:inputs"
+    outputs_key = f"{base}:outputs"
 
     @wraps(method)
-    def wrapper(self, *args, **kwargs):
-        """
-        Enregistre les arguments et le résultat de la méthode.s
-        """
+    def wrapper(self, *args):
         self._redis.rpush(inputs_key, str(args))
-        result = method(self, *args, **kwargs)
+        result = method(self, *args)
         self._redis.rpush(outputs_key, str(result))
         return result
 
     return wrapper
 
 
-def replay(method: Callable[..., Any]) -> None:
-    """Affiche l'historique des appels d'une méthode particulière.
+def replay(method: Callable) -> None:
+    """Affiche l'historique des appels d'une méthode décorée."""
+    base = method.__qualname__
+    r: Redis = method.__self__._redis
 
-    Args:
-        method: La méthode dont on veut afficher l'historique.
-    """
+    raw_count = r.get(base)
+    count = int(raw_count) if raw_count is not None else 0
+    print(f"{base} was called {count} times:")
 
-    redis_instance = method.__self__._redis
+    inputs = r.lrange(f"{base}:inputs", 0, -1)
+    outputs = r.lrange(f"{base}:outputs", 0, -1)
 
-    method_name = method.__qualname__
-    inputs_key = f"{method_name}:inputs"
-    outputs_key = f"{method_name}:outputs"
-
-    count = redis_instance.get(method_name)
-    count = int(count) if count else 0
-
-    print(f"{method_name} was called {count} times:")
-
-    inputs = redis_instance.lrange(inputs_key, 0, -1)
-    outputs = redis_instance.lrange(outputs_key, 0, -1)
-
-    for input_args, output_result in zip(inputs, outputs):
-        input_str = input_args.decode('utf-8')
-        output_str = output_result.decode('utf-8')
-
-        print(f"{method_name}(*{input_str}) -> {output_str}")
+    for inp, out in zip(inputs, outputs):
+        in_str = inp.decode("utf-8")
+        out_str = out.decode("utf-8")
+        print(f"{base}(*{in_str}) -> {out_str}")
 
 
 class Cache:
@@ -87,37 +77,26 @@ class Cache:
     @count_calls
     @call_history
     def store(self, data: Data) -> str:
-        """Stocke `data` sous une clé aléatoire et retourne la clé.
-
-        Args:
-            data: valeur à stocker (str, bytes, int ou float).
-
-        Returns:
-            str: la clé générée.
-        """
+        """Stocke `data` sous une clé aléatoire et retourne la clé."""
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
 
+    # Overloads pour une meilleure précision de type
     @overload
     def get(self, key: str) -> Optional[bytes]: ...
     @overload
     def get(self, key: str, fn: Callable[[bytes], T]) -> Optional[T]: ...
 
     def get(self, key: str, fn: Optional[Callable[[bytes], T]] = None):
-        """Récupère la valeur associée à `key`.
-
-        - Comportement de `Redis.get`: `None` si la clé n'existe pas,
-          sinon `bytes`.
-        - Si `fn` est fourni, applique la fonction de conversion sur les bytes.
-        """
+        """Récupère la valeur associée à `key` (None si absent)."""
         data = self._redis.get(key)
         if data is None:
             return None
         return fn(data) if fn else data
 
     def get_str(self, key: str) -> Optional[str]:
-        """Récupère la valeur et la convertit en str (UTF-8)."""
+        """Récupère la valeur et la convertit en str (UTF‑8)."""
         return self.get(key, fn=lambda d: d.decode("utf-8"))
 
     def get_int(self, key: str) -> Optional[int]:
