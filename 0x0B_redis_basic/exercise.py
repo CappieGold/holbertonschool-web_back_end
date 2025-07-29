@@ -18,6 +18,9 @@ def count_calls(method: Callable[..., Any]) -> Callable[..., Any]:
     """
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        """
+        Incrémente le compteur d'appels de la méthode.
+        """
         self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
     return wrapper
@@ -34,6 +37,9 @@ def call_history(method: Callable[..., Any]) -> Callable[..., Any]:
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        """
+        Enregistre les arguments et le résultat de la méthode.s
+        """
         self._redis.rpush(inputs_key, str(args))
         result = method(self, *args, **kwargs)
         self._redis.rpush(outputs_key, str(result))
