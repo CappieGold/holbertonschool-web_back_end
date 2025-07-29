@@ -50,7 +50,7 @@ def call_history(method: Callable) -> Callable:
 def replay(method: Callable) -> None:
     """Affiche l'historique des appels d'une méthode décorée."""
     base = method.__qualname__
-    r = method.__self__._redis  # accès à l'instance Redis via la méthode liée
+    r = method.__self__._redis
 
     raw_count = r.get(base)
     count = int(raw_count) if raw_count is not None else 0
