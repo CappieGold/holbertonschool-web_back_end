@@ -76,7 +76,7 @@ class Cache:
 
     @count_calls
     @call_history
-    def store(self, data: Data) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """Stocke `data` sous une clé aléatoire et retourne la clé."""
         key = str(uuid.uuid4())
         self._redis.set(key, data)
